@@ -3,153 +3,141 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Evaluación semana 5 CRUD</title>
-    <!-- CSS only -->
+    <title>CRUD Agencia de Coches</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="./CSS/styles.css" />
   </head>
-  <body class="container bg-dark text-white">
-    <h1 class="mt-5">CRUD de autos</h1>
-    <!-- Button trigger modal -->
-    <div class="gap-2 d-md-flex justify-content-md-end">
-      <button
-        type="button"
-        class="btn btn-primary mt-5 mr-auto modal-dialog-centered d-md-block"
-        data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
-        data-bs-whatever="Agregar Carro"
-      >
-        Add
-      </button>
-    </div>
-    <table class="table table-striped table-responsive">
-      <div class="table-responsive">
-        <thead>
-          <tr>
-            <th class="text-white"></th>
-            <th class="text-white">Marca</th>
-            <th class="text-white">Modelo</th>
-            <th class="text-white">Color</th>
-            <th class="text-white">Año</th>
-            <th class="text-white">Precio</th>
-            <th class="text-white">Opciones</th>
-          </tr>
-        </thead>
-        <tbody id="container-users"></tbody>
+  <body>
+    <nav class="navbar navbar-light">
+      <div class="container border shadow-sm p-3 mb-5 bg-white rounded">
+        <a class="navbar-brand" href="#">
+          <img
+            src="https://www.flaticon.es/svg/static/icons/svg/741/741407.svg"
+            alt=""
+            width="30"
+            height="24"
+          />
+          Agencia Autos Pichaco-Ajusco
+        </a>
       </div>
-    </table>
+    </nav>
+    <div class="container mt-5 border shadow-sm p-3 mb-5 bg-white rounded">
+      <h3 class="mb-5">CRUD de coches para agencia</h3>
+      <p id="counter" class="mt-5 text-center"></p>
+      <h3 class="mt-5">Agregar</h3>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="card bg-blue mb-5 shadow-sm p-3 mb-5 bg-white rounded">
+            <div class="card-body">
+              <form
+                action="javascript:void(0);"
+                method="POST"
+                onsubmit="app.Add()"
+              >
+                <div class="form-group">
+                  <label for="add-brand">Brand:</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="add-brand"
+                    placeholder="New brand"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="add-model">Model:</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="add-model"
+                    placeholder="New model"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="add-color">Color:</label>
+                  <input
+                    class="form-control-color"
+                    type="color"
+                    id="add-color"
+                    value="#563d7c"
+                    title="Choose your color"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="add-year">Year:</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="add-year"
+                    placeholder="New year"
+                    required
+                  />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="add-price">Price:</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="add-price"
+                      placeholder="New price"
+                      required
+                    />
+                  </div>
+                </div>
+                <input class="mt-2 btn-primary" type="submit" value="Add" />
+              </form>
 
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="staticBackdrop"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" id="carModal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-dark" id="staticBackdropLabel">
-              Agregar Coche
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+              <div id="spoiler" role="aria-hidden">
+                <form action="javascript:void(0);" method="POST" id="saveEdit">
+                  <input type="text" id="edit-brand" />
+                  <input type="text" id="edit-model" />
+                  <input type="color" id="edit-color" />
+                  <input type="number" id="edit-year" />
+                  <input type="text" id="edit-price" />
+                  <input class="btn-warning" type="submit" value="Edit" />
+                  <a onclick="CloseInput()" aria-label="Close">&#10006;</a>
+                </form>
+              </div>
+            </div>
           </div>
-          <div class="modal-body text-dark">
-            <form
-              id="form-user"
-              onsubmit="event.preventDefault(), addCar()"
-              action="/cars.php"
-            >
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputCarBrand">Marca</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputCarBrand"
-                    placeholder="Marca del coche"
-                    required
-                  />
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="inputModel">Modelo</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputModel"
-                    placeholder="Modelo del coche"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="form-group col-md-6">
-                <label for="inputColor">Color</label>
-                <input
-                  type="color"
-                  class="form-control form-control-color"
-                  id="exampleColorInput"
-                  value="#563d7c"
-                  title="Choose your color"
-                />
-              </div>
-              <div class="form-group col-md-6">
-                <label for="inputYear">Año</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="inputYear"
-                  placeholder="Año"
-                  required
-                />
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputPrice">Precio</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="inputPrice"
-                    placeholder="Precio"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="submit" class="btn btn-primary" id="closemodal">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+        </div>
+        <div class="col-sm-9 table-responsive">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th>Marca</th>
+              <th>Modelo</th>
+              <th>Color</th>
+              <th>Año</th>
+              <th>Precio</th>
+              <th>Opciones</th>
+            </tr>
+            <tbody id="cars"></tbody>
+          </table>
         </div>
       </div>
     </div>
-    <!-- JavaScript Bundle with Popper -->
-
+    <script src="./JS/js.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
       crossorigin="anonymous"
     ></script>
-    <script src="./JS/javascript.js"></script>
   </body>
+  <footer class="bg-light text-center text-lg-start mt-5">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      © 2020 Copyright:
+      <a class="text-dark" href="#">All rights reserved</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
 </html>
